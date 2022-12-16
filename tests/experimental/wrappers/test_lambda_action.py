@@ -1,59 +1,19 @@
 """Test suite for LambdaActionV0."""
-import numpy as np
-import pytest
 
-import gymnasium as gym
-from gymnasium.error import InvalidAction
 from gymnasium.experimental.wrappers import LambdaActionV0
 from gymnasium.spaces import Box
+from tests.experimental.wrappers.utils import record_action_step
 from tests.testing_env import GenericTestEnv
 
-NUM_ENVS = 3
-BOX_SPACE = Box(-5, 5, (1,), dtype=np.float64)
 
+def test_lambda_action_wrapper():
+    """Tests LambdaAction through checking that the action taken is transformed by function."""
+    env = GenericTestEnv(step_func=record_action_step)
+    wrapped_env = LambdaActionV0(env, lambda action: action - 2, Box(2, 3))
 
-def generic_step_fn(self, action):
-    return 0, 0, False, False, {"action": action}
+    sampled_action = wrapped_env.action_space.sample()
+    assert sampled_action not in env.action_space
 
-
-@pytest.mark.parametrize(
-    ("env", "func", "action", "expected"),
-    [
-        (
-            GenericTestEnv(action_space=BOX_SPACE, step_fn=generic_step_fn),
-            lambda action: action + 2,
-            1,
-            3,
-        ),
-    ],
-)
-def test_lambda_action_v0(env, func, action, expected):
-    """Tests lambda action.
-    Tests if function is correctly applied to environment's action.
-    """
-    wrapped_env = LambdaActionV0(env, func)
-    _, _, _, _, info = wrapped_env.step(action)
-    executed_action = info["action"]
-
-    assert executed_action == expected
-
-
-def test_lambda_action_v0_within_vector():
-    """Tests lambda action in vectorized environments.
-    Tests if function is correctly applied to environment's action
-    in vectorized environment.
-    """
-    env = gym.vector.make(
-        "CarRacing-v2", continuous=False, num_envs=NUM_ENVS, asynchronous=False
-    )
-    action = np.ones(NUM_ENVS, dtype=np.float64)
-
-    wrapped_env = LambdaActionV0(env, lambda action: action.astype(int))
-    wrapped_env.reset()
-
-    wrapped_env.step(action)
-
-    # unwrapped env should raise exception because it does not
-    # support float actions
-    with pytest.raises(InvalidAction):
-        env.step(action)
+    _, _, _, _, info = wrapped_env.step(sampled_action)
+    assert info["action"] in env.action_space
+    assert sampled_action - 2 == info["action"]

@@ -13,9 +13,6 @@ title: Functional
 .. autofunction:: gymnasium.experimental.FuncEnv.transition
 
 .. autofunction:: gymnasium.experimental.FuncEnv.observation
-.. autofunction:: gymnasium.experimental.FuncEnv.initial
-
-.. autofunction:: gymnasium.experimental.FuncEnv.observation
 .. autofunction:: gymnasium.experimental.FuncEnv.reward
 .. autofunction:: gymnasium.experimental.FuncEnv.terminal
 
@@ -32,5 +29,9 @@ title: Functional
 ## gymnasium.experimental.func2env.FunctionalJaxCompatibilityEnv
 
 ```{eval-rst}
-... autoclass:: gymasnium.experimental.func2env.FunctionalJaxCompatibilityEnv
+.. autoclass:: gymasnium.experimental.func2env.FunctionalJaxCompatibilityEnv
+
+.. autofunction:: gymasnium.experimental.func2env.FunctionalJaxCompatibilityEnv.reset
+.. autofunction:: gymasnium.experimental.func2env.FunctionalJaxCompatibilityEnv.step
+.. autofunction:: gymasnium.experimental.func2env.FunctionalJaxCompatibilityEnv.render
 ```

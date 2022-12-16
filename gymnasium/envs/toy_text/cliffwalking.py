@@ -10,6 +10,7 @@ from gymnasium import Env, spaces
 from gymnasium.envs.toy_text.utils import categorical_sample
 from gymnasium.error import DependencyNotInstalled
 
+
 UP = 0
 RIGHT = 1
 DOWN = 2
@@ -207,10 +208,10 @@ class CliffWalkingEnv(Env):
     def _render_gui(self, mode):
         try:
             import pygame
-        except ImportError:
+        except ImportError as e:
             raise DependencyNotInstalled(
                 "pygame is not installed, run `pip install gymnasium[toy_text]`"
-            )
+            ) from e
         if self.window_surface is None:
             pygame.init()
 
