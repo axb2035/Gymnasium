@@ -238,7 +238,7 @@ def env_step_passive_checker(env, action):
         )
         obs, reward, done, info = result
 
-        if not isinstance(done, (bool, np.bool8)):
+        if not isinstance(done, (bool, np.bool_)):
             logger.warn(
                 f"Expects `done` signal to be a boolean, actual type: {type(done)}"
             )
@@ -246,11 +246,11 @@ def env_step_passive_checker(env, action):
         obs, reward, terminated, truncated, info = result
 
         # np.bool is actual python bool not np boolean type, therefore bool_ or bool8
-        if not isinstance(terminated, (bool, np.bool8)):
+        if not isinstance(terminated, (bool, np.bool_)):
             logger.warn(
                 f"Expects `terminated` signal to be a boolean, actual type: {type(terminated)}"
             )
-        if not isinstance(truncated, (bool, np.bool8)):
+        if not isinstance(truncated, (bool, np.bool_)):
             logger.warn(
                 f"Expects `truncated` signal to be a boolean, actual type: {type(truncated)}"
             )
@@ -341,9 +341,9 @@ def env_render_passive_checker(env):
             "No render modes was declared in the environment (env.metadata['render_modes'] is None or not defined), you may have trouble when calling `.render()`."
         )
     else:
-        if not isinstance(render_modes, (list, tuple)):
+        if not isinstance(render_modes, (set, list, tuple)):
             logger.warn(
-                f"Expects the render_modes to be a sequence (i.e. list, tuple), actual type: {type(render_modes)}"
+                f"Expects the render_modes to be a set, list or tuple, actual type: {type(render_modes)}"
             )
         elif not all(isinstance(mode, str) for mode in render_modes):
             logger.warn(

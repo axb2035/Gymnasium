@@ -47,7 +47,7 @@ class Env(Generic[ObsType, ActType]):
     """
 
     # Set this in SOME subclasses
-    metadata: dict[str, Any] = {"render_modes": []}
+    metadata: dict[str, Any] = {"render_modes": {}}
     # define render_mode if your environment supports rendering
     render_mode: str | None = None
     reward_range = (-float("inf"), float("inf"))
@@ -262,7 +262,7 @@ class Wrapper(Env[WrapperObsType, WrapperActType]):
         self._reward_range: tuple[SupportsFloat, SupportsFloat] | None = None
         self._metadata: dict[str, Any] | None = None
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> Any:
         """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
         if name == "_np_random":
             raise AttributeError(
